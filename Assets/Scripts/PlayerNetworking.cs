@@ -6,8 +6,8 @@ using UnityEngine.UI;
 public class PlayerNetworking : NetworkBehaviour
 {
 
-    [SyncVar(hook = nameof(HitMessage))]
-    [SerializeField] int playerHealth = 100;
+    //[SyncVar(hook = nameof(HitMessage))]
+    //[SerializeField] int playerHealth = 100;
     [SerializeField] Color playerColor = Color.white;
 
     // Naming Stuff
@@ -61,14 +61,14 @@ public class PlayerNetworking : NetworkBehaviour
         nameInstance.Rotate(0f, 180f, 0f); // Flip the label to face the player
     }
 
-    void OnCollisionEnter(Collision collision)
+    /*void OnCollisionEnter(Collision collision)
     {
         if (!isServer) return;
         if (collision.gameObject.CompareTag("Bullet"))
         {
             CmdChangeHealth(-10);
         }
-    }
+    }*/
 
     [Command]
     void CmdUpdateName(string newName)
@@ -81,7 +81,7 @@ public class PlayerNetworking : NetworkBehaviour
         nameInstance.GetComponent<TMP_Text> ().text = newName;
     }
 
-    [Command]
+    /*[Command]
     void CmdChangeHealth(int damage)
     {
         playerHealth += damage;
@@ -90,5 +90,5 @@ public class PlayerNetworking : NetworkBehaviour
     void HitMessage(int oldHealth, int newHealth) {
         if (!isLocalPlayer) return;
         Debug.Log("You are the weakest link and have been voted off the island!");
-    }
+    }*/
 }
