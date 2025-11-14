@@ -32,7 +32,7 @@ public class PlayerNetworking : NetworkBehaviour
             NameChanger.onChangeName += CmdUpdateName; 
         }
         // If we are NOT the local player, disable the TankController 
-            GetComponent<TankController>().enabled = isLocalPlayer;
+            GetComponent<PlayerController>().enabled = isLocalPlayer;
 
         if (isLocalPlayer)
         {

@@ -6,9 +6,9 @@ public class ResetPlayer : MonoBehaviour
     void OnCollisionEnter(Collision collision)
     {
         Transform tform = collision.transform;
-        if (tform.GetComponent<TankController>())
+        if (tform.GetComponent<PlayerController>())
         {
-            TankController tc = tform.GetComponent<TankController>();
+            PlayerController tc = tform.GetComponent<PlayerController>();
             tform.GetComponent<Rigidbody>().linearVelocity = Vector3.zero;
             tform.position = tc.startPos;
             tform.localEulerAngles = tc.startRot;
