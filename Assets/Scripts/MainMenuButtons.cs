@@ -45,7 +45,7 @@ public class MainMenuButtons : MonoBehaviour
     private void StartHost()
     {
         Debug.Log("Hosting the game...");
-        networkManager.StartHost();
+        NetworkManager.singleton.StartHost();
         HideAllPanels();
     }
 

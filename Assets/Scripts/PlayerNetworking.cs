@@ -14,6 +14,7 @@ public class PlayerNetworking : NetworkBehaviour
     [SyncVar (hook = nameof(UpdateName))]
     [SerializeField] string playerName = "New Player";
     [SerializeField] Transform namePrefab, nameInstance;
+    [SerializeField] string miniMapCamera = "Map";
     Vector3 nameOffset = new Vector3(0, .1f, 0);
 
     // UI Stuff
@@ -30,7 +31,7 @@ public class PlayerNetworking : NetworkBehaviour
         {
             // Listen to the onChangeName event, and link it to trigger the CmdUpdateName function
             NameChanger.onChangeName += CmdUpdateName; 
-            //MiniMapCamera.player += ;
+            MiniMapCamera.onAttachCamera += CmdGetCamera;
         }
         // If we are NOT the local player, disable the Controller 
             GetComponent<PlayerController>().enabled = isLocalPlayer;
@@ -38,6 +39,7 @@ public class PlayerNetworking : NetworkBehaviour
         if (isLocalPlayer)
         {
             ChaseCamera.player = transform;
+            MiniMapCamera.player = transform;
             foreach (Transform child in transform)
             {
                 GetComponent<Renderer>().material.color = Color.green;
@@ -80,6 +82,12 @@ public class PlayerNetworking : NetworkBehaviour
     void UpdateName(string oldName, string newName)
     {
         nameInstance.GetComponent<TMP_Text> ().text = newName;
+    }
+
+    [Command]
+    void CmdGetCamera(string map)
+    {
+        //miniMapCamera.GetComponent<MiniMapCamera>();
     }
 
 
