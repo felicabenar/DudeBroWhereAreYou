@@ -30,8 +30,9 @@ public class PlayerNetworking : NetworkBehaviour
         {
             // Listen to the onChangeName event, and link it to trigger the CmdUpdateName function
             NameChanger.onChangeName += CmdUpdateName; 
+            //MiniMapCamera.player += ;
         }
-        // If we are NOT the local player, disable the TankController 
+        // If we are NOT the local player, disable the Controller 
             GetComponent<PlayerController>().enabled = isLocalPlayer;
 
         if (isLocalPlayer)
@@ -80,6 +81,7 @@ public class PlayerNetworking : NetworkBehaviour
     {
         nameInstance.GetComponent<TMP_Text> ().text = newName;
     }
+
 
     /*[Command]
     void CmdChangeHealth(int damage)
