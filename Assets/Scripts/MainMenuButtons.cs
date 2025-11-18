@@ -87,7 +87,6 @@ public class MainMenuButtons : MonoBehaviour
         Debug.Log("Joining game...");
         networkManager.StartClient();
         SetupCanvas();
-        HideAllPanels();
     }
 
     public void StopServer()
