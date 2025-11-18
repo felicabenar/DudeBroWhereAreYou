@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 6877693431855808388}
   m_Layer: 0
   m_Name: MapCamera
-  m_TagString: Untagged
+  m_TagString: SecondCamera
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

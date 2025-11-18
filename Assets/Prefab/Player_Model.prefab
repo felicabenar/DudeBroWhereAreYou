@@ -177,7 +177,7 @@ GameObject:
   - component: {fileID: 4094479827682312020}
   m_Layer: 0
   m_Name: Player_Model
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -385,6 +385,7 @@ MonoBehaviour:
   playerName: New Player
   namePrefab: {fileID: 789640245937963206, guid: 60a6e11484b59dc4081a8c559854f619, type: 3}
   nameInstance: {fileID: 0}
+  miniMapCamera: Map
 --- !u!33 &4094479827682312020
 MeshFilter:
   m_ObjectHideFlags: 0

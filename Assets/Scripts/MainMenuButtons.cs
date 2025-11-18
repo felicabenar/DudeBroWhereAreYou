@@ -8,10 +8,18 @@ public class MainMenuButtons : MonoBehaviour
 {
     [Header("Mirror Components")]
     [SerializeField] private NetworkManager networkManager;
+    [SerializeField] private GameObject PanelStart;
+    [SerializeField] private GameObject PanelStop;
+    [SerializeField] private InputField inputFieldAddress;
+	[SerializeField] private Text serverText;
+	[SerializeField] private Text clientText;
+
 
     [Header("UI Buttons")]
     [SerializeField] private Button hostButton;
+    [SerializeField] private Button serverButton;
     [SerializeField] private Button joinButton;
+    [SerializeField] private Button stopButton;
     [SerializeField] private Button settingsButton;
     [SerializeField] private Button aboutButton;
     [SerializeField] private Button exitButton;
@@ -22,18 +30,28 @@ public class MainMenuButtons : MonoBehaviour
     [SerializeField] private GameObject mainMenuPanel;
     [SerializeField] private GameObject settingsPanel;
     [SerializeField] private GameObject aboutPanel;
+    [SerializeField] private GameObject gamePanel;
 
     private void Start()
     {
+        //Update the canvas text if you have manually changed network managers address from the game object before starting the game scene
+        if (NetworkManager.singleton.networkAddress != "localhost") { inputFieldAddress.text = NetworkManager.singleton.networkAddress; }
+        //Adds a listener to the main input field and invokes a method when the value changes.
+        inputFieldAddress.onValueChanged.AddListener(delegate { ValueChangeCheck(); });
+        
         // Bind button events safely using null-conditional operator
-        hostButton?.onClick.AddListener(StartHost);
-        joinButton?.onClick.AddListener(StartClient);
-        settingsButton?.onClick.AddListener(() => ShowPanel(settingsPanel));
-        aboutButton?.onClick.AddListener(() => ShowPanel(aboutPanel));
-        exitButton?.onClick.AddListener(ExitGame);
-        back1Button?.onClick.AddListener(ShowMainMenu);
-        back2Button?.onClick.AddListener(ShowMainMenu);
+        hostButton.onClick.AddListener(StartHost);
+        serverButton.onClick.AddListener(StartServer);
+        joinButton.onClick.AddListener(StartClient);
+        stopButton.onClick.AddListener(StopServer);
+        settingsButton.onClick.AddListener(() => ShowPanel(settingsPanel));
+        aboutButton.onClick.AddListener(() => ShowPanel(aboutPanel));
+        exitButton.onClick.AddListener(ExitGame);
+        back1Button.onClick.AddListener(ShowMainMenu);
+        back2Button.onClick.AddListener(ShowMainMenu);
 
+        //This updates the Unity canvas, we have to manually call it every change, unlike legacy OnGUI.
+        SetupCanvas();
         ShowMainMenu(); // Ensure correct initial state
     }
 
@@ -41,11 +59,25 @@ public class MainMenuButtons : MonoBehaviour
     // Network Actions
     // ------------------------------
 
+    // Invoked when the value of the text field changes.
+    public void ValueChangeCheck()
+    {
+        NetworkManager.singleton.networkAddress = inputFieldAddress.text;
+    }
+    
     /// <summary>Starts the game as a Host (server + client).</summary>
     private void StartHost()
     {
-        Debug.Log("Hosting the game...");
+        Debug.Log("Hosting the Game...");
         NetworkManager.singleton.StartHost();
+        SetupCanvas();
+        HideAllPanels();
+    }
+
+    public void StartServer()
+    {
+        NetworkManager.singleton.StartServer();
+        SetupCanvas();
         HideAllPanels();
     }
 
@@ -54,7 +86,29 @@ public class MainMenuButtons : MonoBehaviour
     {
         Debug.Log("Joining game...");
         networkManager.StartClient();
+        SetupCanvas();
         HideAllPanels();
+    }
+
+    public void StopServer()
+    {
+        // stop host if host mode
+        if (NetworkServer.active && NetworkClient.isConnected)
+        {
+            NetworkManager.singleton.StopHost();
+        }
+        // stop client if client-only
+        else if (NetworkClient.isConnected)
+        {
+            NetworkManager.singleton.StopClient();
+        }
+        // stop server if server-only
+        else if (NetworkServer.active)
+        {
+            NetworkManager.singleton.StopServer();
+        }
+
+        SetupCanvas();
     }
 
     // ------------------------------
@@ -80,6 +134,42 @@ public class MainMenuButtons : MonoBehaviour
         mainMenuPanel?.SetActive(false);
         settingsPanel?.SetActive(false);
         aboutPanel?.SetActive(false);
+    }
+
+    private void SetupCanvas()
+    {
+        // Here we will dump majority of the canvas UI that may be changed.
+
+        if (!NetworkClient.isConnected && !NetworkServer.active)
+        {
+            if (NetworkClient.active)
+            {
+                PanelStart.SetActive(false);
+                PanelStop.SetActive(true);
+                clientText.text = "Connecting to " + NetworkManager.singleton.networkAddress + "..";
+            }
+            else
+            {
+                PanelStart.SetActive(true);
+                PanelStop.SetActive(false);
+            }
+        }
+        else
+        {
+            PanelStart.SetActive(false);
+            PanelStop.SetActive(true);
+
+            // server / client status message
+            if (NetworkServer.active)
+            {
+                serverText.text = "Server: active. Transport: " + Transport.active;
+                // Note, older mirror versions use: Transport.activeTransport
+            }
+            if (NetworkClient.isConnected)
+            {
+                clientText.text = "Client: address=" + NetworkManager.singleton.networkAddress;
+            }
+        }
     }
 
     // ------------------------------
