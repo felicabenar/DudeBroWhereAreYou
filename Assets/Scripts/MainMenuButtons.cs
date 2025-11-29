@@ -11,9 +11,6 @@ public class MainMenuButtons : MonoBehaviour
     [SerializeField] private GameObject PanelStart;
     [SerializeField] private GameObject PanelStop;
     [SerializeField] private InputField inputFieldAddress;
-	[SerializeField] private Text serverText;
-	[SerializeField] private Text clientText;
-
 
     [Header("UI Buttons")]
     [SerializeField] private Button hostButton;
@@ -145,7 +142,6 @@ public class MainMenuButtons : MonoBehaviour
             {
                 PanelStart.SetActive(false);
                 PanelStop.SetActive(true);
-                clientText.text = "Connecting to " + NetworkManager.singleton.networkAddress + "..";
             }
             else
             {
@@ -157,17 +153,6 @@ public class MainMenuButtons : MonoBehaviour
         {
             PanelStart.SetActive(false);
             PanelStop.SetActive(true);
-
-            // server / client status message
-            if (NetworkServer.active)
-            {
-                serverText.text = "Server: active. Transport: " + Transport.active;
-                // Note, older mirror versions use: Transport.activeTransport
-            }
-            if (NetworkClient.isConnected)
-            {
-                clientText.text = "Client: address=" + NetworkManager.singleton.networkAddress;
-            }
         }
     }
 

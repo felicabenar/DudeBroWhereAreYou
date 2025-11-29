@@ -31,7 +31,7 @@ public class PlayerNetworking : NetworkBehaviour
         {
             // Listen to the onChangeName event, and link it to trigger the CmdUpdateName function
             NameChanger.onChangeName += CmdUpdateName; 
-            MiniMap.onAttachCamera += CmdGetCamera;
+            //MiniMap.onAttachCamera += CmdGetCamera;
         }
         // If we are NOT the local player, disable the Controller 
             GetComponent<PlayerController>().enabled = isLocalPlayer;

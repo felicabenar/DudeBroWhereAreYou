@@ -6,7 +6,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-public class MiniMap : NetworkBehaviour
+public class MiniMap : MonoBehaviour
 {
 
     public static Transform player;
@@ -14,22 +14,17 @@ public class MiniMap : NetworkBehaviour
     [SerializeField] Vector3 rotation = new Vector3(90, 0, 0);
     [SerializeField] MiniMap miniMap;
 
-    public static Action<string> onAttachCamera;
+    //public static Action<string> onAttachCamera;
     //private string miniMapCamera;
 
+/*
     void Awake()
     {
         GetComponent<Renderer>();
         GetComponent<Camera>();
     }
+    */
 
-    void Start()
-    {
-        if (isLocalPlayer)
-        {
-            //MiniMapCamera.player = transform;
-        }
-    }
     void FixedUpdate()
     {
         if (player == null) return;

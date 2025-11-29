@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4163260792420343351}
   - component: {fileID: 8983806511184725191}
-  - component: {fileID: 8733929322123458630}
+  - component: {fileID: 5588508613643713497}
   m_Layer: 0
   m_Name: MiniMapCamera
   m_TagString: SecondCamera
@@ -84,7 +84,7 @@ Camera:
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
---- !u!114 &8733929322123458630
+--- !u!114 &5588508613643713497
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -93,8 +93,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 8110548517571143718}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5a5781ed24ea67934bedf39a21f7edf7, type: 3}
+  m_Script: {fileID: 11500000, guid: 77f566e56f245d02794bf9e9ecc997e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   height: 5
   rotation: {x: 90, y: 0, z: 0}
+  miniMap: {fileID: 0}
