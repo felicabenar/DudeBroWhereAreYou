@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using System;
 
 /// <summary>
 /// Singleton Game Manager for handling global game state,
@@ -19,6 +20,10 @@ public class GameManager : MonoBehaviour
 	private string currentScene;   // Tracks the currently loaded scene
 
 	public string playerName;      // Stores the player's name
+	private bool gameActive = false;
+
+	private int transportValue;
+	public int TransportValue { get => transportValue; set => transportValue = value; }
 
 	// -----------------------------
 	// Unity Lifecycle
@@ -54,7 +59,9 @@ public class GameManager : MonoBehaviour
 		if (SceneManager.sceneCount == 1)
 		{
 			SetSceneName("01 Menu");
-		}
+		}        
+		StartGame();
+
 	}
 
 	// -----------------------------
@@ -76,6 +83,25 @@ public class GameManager : MonoBehaviour
 		SceneManager.LoadScene(name, LoadSceneMode.Additive);
 		currentScene = name;
 	}
+
+	
+	public void CheckStartGame(int playerCount)
+    {
+        //if (gameActive) return;
+        
+        // Start when 2 or more players
+        if (playerCount >= 2)
+        {
+            StartGame();
+        }
+    }
+
+    public void StartGame()
+    {
+        if (!gameActive) return;
+        
+        gameActive = true;
+    }
 
 	// -----------------------------
 	// Player Data Management

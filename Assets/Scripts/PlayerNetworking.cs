@@ -1,3 +1,7 @@
+//THIS CODE WAS CLEANED-UP WITH AI 
+
+
+
 using Mirror;
 using TMPro;
 using UnityEngine;
@@ -5,100 +9,86 @@ using UnityEngine.UI;
 
 public class PlayerNetworking : NetworkBehaviour
 {
+    // -------------------------------
+    // Player Name Syncing
+    // -------------------------------
 
-    //[SyncVar(hook = nameof(HitMessage))]
-    //[SerializeField] int playerHealth = 100;
-    [SerializeField] Color playerColor = Color.white;
-
-    // Naming Stuff
-    [SyncVar (hook = nameof(UpdateName))]
+    // SyncVar: synchronized across network.
+    // When "playerName" changes on the server, all clients automatically run UpdateName().
+    [SyncVar(hook = nameof(UpdateName))]
     [SerializeField] string playerName = "New Player";
-    [SerializeField] Transform namePrefab, nameInstance;
-    //[SerializeField] string miniMapCamera = "Map";
+
+    // Prefab and instance for name label above the player's head
+    [SerializeField] Transform namePrefab;
+    [SerializeField] Transform nameInstance;
+
+    // Offset for positioning name label above the player
     Vector3 nameOffset = new Vector3(0, .1f, 0);
 
-    // UI Stuff
 
-    void Awake()
+    // -------------------------------
+    // Initialization
+    // -------------------------------
+
+    private void Awake()
     {
+        // Spawn the floating name label UI
         nameInstance = Instantiate(namePrefab, transform.position + nameOffset, Quaternion.identity);
+
+        // Reads stored player preferences (TransportValue), though not used here
+        PlayerPrefs.GetInt("TransportValue");
     }
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    private void Start()
     {
         if (isLocalPlayer)
         {
-            // Listen to the onChangeName event, and link it to trigger the CmdUpdateName function
-            NameChanger.onChangeName += CmdUpdateName; 
-            //MiniMap.onAttachCamera += CmdGetCamera;
+            // Local player listens for the global name change event
+            // When fired, calls CmdUpdateName (runs on server)
+            NameChanger.onChangeName += CmdUpdateName;
         }
-        // If we are NOT the local player, disable the Controller 
-            GetComponent<PlayerController>().enabled = isLocalPlayer;
 
-        if (isLocalPlayer)
-        {
-            ChaseCamera.player = transform;
-            MiniMap.player = transform;
-            foreach (Transform child in transform)
-            {
-                GetComponent<Renderer>().material.color = Color.green;
-                child.GetComponent<Renderer>().material.color = Color.green;
-            }
-
-        }
-        else
-        {
-            foreach (Transform child in transform)
-            {
-                GetComponent<Renderer>().material.color = Color.red;
-                child.GetComponent<Renderer>().material.color = Color.red;
-            }
-        }
+        // Disable PlayerController on remote players
+        GetComponent<PlayerController>().enabled = isLocalPlayer;
     }
 
-    void LateUpdate()
+
+    // -------------------------------
+    // Update Name UI Position + Facing
+    // -------------------------------
+
+    private void LateUpdate()
     {
+        // Follow player position
         nameInstance.position = transform.position + nameOffset;
+
+        // Make the label face the main camera
         nameInstance.LookAt(Camera.main.transform);
-        nameInstance.Rotate(0f, 180f, 0f); // Flip the label to face the player
+
+        // Rotate 180º so the text appears upright to the camera
+        nameInstance.Rotate(0f, 180f, 0f);
     }
 
-    /*void OnCollisionEnter(Collision collision)
-    {
-        if (!isServer) return;
-        if (collision.gameObject.CompareTag("Bullet"))
-        {
-            CmdChangeHealth(-10);
-        }
-    }*/
 
+    // -------------------------------
+    // Commands & SyncVar Hooks
+    // -------------------------------
+
+    // Command: Runs on the server when called from a client
     [Command]
-    void CmdUpdateName(string newName)
+    private void CmdUpdateName(string newName)
     {
-        playerName = newName;
+        playerName = newName; // Triggers SyncVar hook on all clients
     }
 
-    void UpdateName(string oldName, string newName)
+    // SyncVar hook: called on clients when "playerName" changes
+    private void UpdateName(string oldName, string newName)
     {
-        nameInstance.GetComponent<TMP_Text> ().text = newName;
+        nameInstance.GetComponent<TMP_Text>().text = newName;
     }
-
-    [Command]
-    void CmdGetCamera(string map)
-    {
-        //miniMapCamera.GetComponent<MiniMapCamera>();
-    }
-
-
-    /*[Command]
-    void CmdChangeHealth(int damage)
-    {
-        playerHealth += damage;
-    }
-
-    void HitMessage(int oldHealth, int newHealth) {
-        if (!isLocalPlayer) return;
-        Debug.Log("You are the weakest link and have been voted off the island!");
-    }*/
 }
+
+
+
+
+//THIS CODE WAS CLEANED-UP WITH AI 

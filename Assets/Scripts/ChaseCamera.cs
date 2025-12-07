@@ -1,85 +1,54 @@
-using Unity.VisualScripting;
-using Unity.VisualScripting.FullSerializer;
+//THIS CODE WAS CLEANED-UP WITH AI
+
 using UnityEngine;
 
+/// <summary>
+/// Smooth chase camera that follows a target player from behind.
+/// </summary>
 public class ChaseCamera : MonoBehaviour
 {
-
+    /// <summary> The player transform the camera will follow. </summary>
     public static Transform player;
-    [SerializeField] float distance = 1f;
-    [SerializeField] float height = 1f;
-    [SerializeField] Vector3 offset = new Vector3(0, 1, 0);
 
-    [SerializeField] float moveSpeed = 20f;
-    [SerializeField] float rotSpeed = 15f;
+    [Header("Follow Settings")]
+    [SerializeField] private float distance = 1f;       // Distance behind the player
+    [SerializeField] private float height = 1f;         // Height above the player
+    [SerializeField] private Vector3 offset = new Vector3(0, 1, 0); // Extra offset for aiming at the player
 
-    void FixedUpdate()
+    [Header("Smoothing Settings")]
+    [SerializeField] private float moveSpeed = 20f;     // How fast the camera moves
+    [SerializeField] private float rotSpeed = 15f;      // How fast the camera rotates
+
+    private void FixedUpdate()
     {
         if (player == null) return;
 
+        // --- ROTATION ---
+        // Position to look at (usually above the player's head)
         Vector3 lookPos = player.position + offset;
-        Vector3 relativePos = lookPos - transform.position;
-        Quaternion rot = Quaternion.LookRotation(relativePos);
 
-        transform.rotation = Quaternion.Lerp(transform.rotation, rot, Time.fixedDeltaTime * rotSpeed);
+        // Smoothly rotate the camera to face the player
+        Quaternion targetRot = Quaternion.LookRotation(lookPos - transform.position);
+        transform.rotation = Quaternion.Lerp(
+            transform.rotation,
+            targetRot,
+            rotSpeed * Time.fixedDeltaTime
+        );
 
-        Vector3 targetPos = player.position + player.up * height - player.forward * distance;
+        // --- POSITION ---
+        // Calculate follow position behind and above the player
+        Vector3 targetPos = player.position
+                            + player.up * height
+                            - player.forward * distance;
 
-        transform.position = Vector3.Lerp(transform.position, targetPos, Time.fixedDeltaTime * moveSpeed);
+        // Smoothly move camera toward the follow position
+        transform.position = Vector3.Lerp(
+            transform.position,
+            targetPos,
+            moveSpeed * Time.fixedDeltaTime
+        );
     }
 }
 
-/*using Cinemachine;
-using Mirror;
-using UnityEngine;
 
-    public class PlayerCameraController : NetworkBehaviour
-    {
-        [Header("Camera")]
-        [SerializeField] private Vector2 maxFollowOffset = new Vector2(-1f, 6f);
-        [SerializeField] private Vector2 cameraVelocity = new Vector2(4f, 0.25f);
-        [SerializeField] private Transform playerTransform = null;
-        [SerializeField] private CinemachineVirtualCamera virtualCamera = null;
-
-        private Controls controls;
-        private Controls Controls
-        {
-            get
-            {
-                if (controls != null) { return controls; }
-                return controls = new Controls();
-            }
-        }
-
-        private CinemachineTransposer transposer;
-
-        public override void OnStartAuthority()
-        {
-            transposer = virtualCamera.GetCinemachineComponent<CinemachineTransposer>();
-
-            virtualCamera.gameObject.SetActive(true);
-
-            enabled = true;
-
-            Controls.Player.Look.performed += ctx => Look(ctx.ReadValue<Vector2>());
-        }
-
-        [ClientCallback]
-        private void OnEnable() => Controls.Enable();
-        [ClientCallback]
-        private void OnDisable() => Controls.Disable();
-
-        private void Look(Vector2 lookAxis)
-        {
-            float deltaTime = Time.deltaTime;
-
-            transposer.m_FollowOffset.y = Mathf.Clamp(
-                transposer.m_FollowOffset.y - (lookAxis.y * cameraVelocity.y * deltaTime),
-                maxFollowOffset.x,
-                maxFollowOffset.y);
-
-            playerTransform.Rotate(0f, lookAxis.x * cameraVelocity.x * deltaTime, 0f);
-        }
-    }
-
-*/
+//THIS CODE WAS CLEANED-UP WITH AI

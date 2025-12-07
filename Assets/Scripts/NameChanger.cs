@@ -1,71 +1,62 @@
+//THIS CODE WAS CLEANED-UP WITH AI
+
+
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
+/// <summary>
+/// Handles changing and saving the player's display name.
+/// Invokes a global event so other scripts can react when the name changes.
+/// </summary>
 public class NameChanger : MonoBehaviour
 {
-    [SerializeField] TMP_InputField nameInput;
+    [Header("UI")]
+    [SerializeField] private TMP_InputField nameInput;
+
+    [Header("Settings")]
+    [SerializeField] private int value;   // Unknown purpose, but kept for PlayerPrefs
+
+    /// <summary>
+    /// The player's current display name (static so other scripts can read it).
+    /// </summary>
     public static string DisplayName { get; private set; }
 
-    // Create an event called onChangeName
-    // onChangeName must pass in a <string> when its called
+    /// <summary>
+    /// Global event triggered whenever the player updates their name.
+    /// Passes the new name as a string.
+    /// </summary>
     public static Action<string> onChangeName;
-    private string PlayerName;
 
+    
+    /// <summary>
+    /// Called by UI button. Updates the name and notifies listeners.
+    /// </summary>
     public void ChangeName()
     {
-        // If nothing is listening to onChangeName, do nothing
-        if (onChangeName != null && nameInput.text.Length > 0)
-        {
-            Debug.Log("Changing Name");
-            onChangeName.Invoke(nameInput.text);
-            PlayerPrefs.SetString("onChangeName", PlayerName);
-        }
+        // Do nothing if there's no event OR empty text
+        if (string.IsNullOrWhiteSpace(nameInput.text))
+            return;
+
+        // Set new name
+        DisplayName = nameInput.text;
+
+        // Invoke listeners (network scripts, UI updates, etc.)
+        onChangeName?.Invoke(DisplayName);
+
+        // Save to PlayerPrefs for persistent storage
+        PlayerPrefs.SetString("PlayerName", DisplayName);
+        PlayerPrefs.Save();
+    }
+
+
+    private void FixedUpdate()
+    {
+        // Save "value" to PlayerPrefs every physics tick (if needed)
+        PlayerPrefs.SetInt("TransportValue", value);
     }
 }
 
 
-/*
-using TMPro;
-using UnityEngine;
-using UnityEngine.UI;
 
-    public class PlayerNameInput : MonoBehaviour
-    {
-        [Header("UI")]
-        [SerializeField] private TMP_InputField nameInputField = null;
-        [SerializeField] private Button continueButton = null;
-
-        public static string DisplayName { get; private set; }
-
-        private const string PlayerPrefsNameKey = "PlayerName";
-
-        private void Start() => SetUpInputField();
-
-        private void SetUpInputField()
-        {
-            if (!PlayerPrefs.HasKey(PlayerPrefsNameKey)) { return; }
-
-            string defaultName = PlayerPrefs.GetString(PlayerPrefsNameKey);
-
-            nameInputField.text = defaultName;
-
-            SetPlayerName(defaultName);
-        }
-
-        public void SetPlayerName(string name)
-        {
-            continueButton.interactable = !string.IsNullOrEmpty(name);
-        }
-
-        public void SavePlayerName()
-        {
-            DisplayName = nameInputField.text;
-
-            PlayerPrefs.SetString(PlayerPrefsNameKey, DisplayName);
-        }
-    }
-*/
+//THIS CODE WAS CLEANED-UP WITH AI

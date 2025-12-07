@@ -60,8 +60,8 @@ MonoBehaviour:
   disconnectInactiveTimeout: 60
   exceptionsDisconnect: 1
   authenticator: {fileID: 0}
-  offlineScene: 
-  onlineScene: 
+  offlineScene: Assets/Scenes/01 Menu.unity
+  onlineScene: Assets/Scenes/03 Game.unity
   offlineSceneLoadDelay: 0
   playerPrefab: {fileID: 2192778477004323949, guid: 13b6d8f4c3e2b581f8a86464fa0044d5, type: 3}
   autoCreatePlayer: 1
