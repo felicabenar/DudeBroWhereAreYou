@@ -13,11 +13,11 @@ public class ChaseCamera : MonoBehaviour
     [Header("Follow Settings")]
     [SerializeField] private float distance = 1f;       // Distance behind the player
     [SerializeField] private float height = 1f;         // Height above the player
-    [SerializeField] private Vector3 offset = new Vector3(0, 1, 0); // Extra offset for aiming at the player
+    [SerializeField] private Vector3 offset = new Vector3(0, 1, 0);     // Extra offset for aiming at the player
 
     [Header("Smoothing Settings")]
-    [SerializeField] private float moveSpeed = 20f;     // How fast the camera moves
-    [SerializeField] private float rotSpeed = 15f;      // How fast the camera rotates
+    [SerializeField] private float moveSpeed = 10f;     // How fast the camera moves
+    [SerializeField] private float rotSpeed = 5f;      // How fast the camera rotates
 
     private void FixedUpdate()
     {

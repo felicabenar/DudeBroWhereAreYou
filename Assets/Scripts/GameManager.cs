@@ -1,3 +1,6 @@
+//THIS CODE WAS CLEANED-UP WITH AI
+
+
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using System;
@@ -115,3 +118,7 @@ public class GameManager : MonoBehaviour
 		playerName = name;
 	}
 }
+
+
+
+//THIS CODE WAS CLEANED-UP WITH AI

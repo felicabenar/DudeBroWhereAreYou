@@ -104,7 +104,7 @@ public class GameTimer : NetworkBehaviour
     // ---------------------------------------------------------------------
 
     /// <summary>
-    /// Resets and starts a new game round (server only).
+    /// Resets and starts a new game.
     /// </summary>
     [Server]
     public void StartGame()

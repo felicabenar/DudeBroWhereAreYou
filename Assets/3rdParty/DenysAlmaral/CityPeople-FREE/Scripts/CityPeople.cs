@@ -99,7 +99,7 @@ namespace CityPeople
         {
             while (true)
             {
-                yield return new WaitForSeconds(15.0f + Random.value * 5.0f);
+                yield return new WaitForSeconds(0f);
                 PlayAnyClip();
             }
         }
